@@ -19,8 +19,47 @@ decide to switch.
   (SIL OFL, see `static/fonts/OFL.txt`).
 * `wxdash.service` is a systemd unit that runs the server as user `kitchen`.
 * `kiosk.sh` opens the dashboard in Chromium, full-screen or windowed.
+* `updater.py`, `wxdash-update.service`, `wxdash-update.timer`: the self-updater (see below).
+* `install.sh`: one-shot installer; `publish.sh`: builds the release files (box only).
 
-## Install on the Pi (PiConsole keeps running)
+## One-line install / repair (recommended)
+
+```bash
+curl -sL https://raw.githubusercontent.com/dodger6/kitchen-weather-display/main/install.sh | sudo bash
+#   add  -s -- --close-terminals  after "bash" to also close leftover terminal windows
+```
+
+`install.sh` is safe to run again at any time. It downloads `latest.json` and
+`wxdash.tgz`, checks the sha256, installs into `/home/kitchen/wxdash` (keeping
+any local files that aren't in the archive and saving the old copy as
+`/home/kitchen/wxdash.prev`), installs and enables `wxdash.service`,
+`wxdash-update.service` and `wxdash-update.timer`, restarts wxdash, makes
+sure `~/.config/labwc/autostart` opens the kiosk, relaunches the kiosk, and
+prints a summary. It never touches PiConsole or `wfpiconsole.ini`.
+
+## Self-update
+
+* `VERSION` holds the version; `/api/health` reports it.
+* The repo has `latest.json` (`{"version": "...", "sha256": "..."}`) next to `wxdash.tgz`.
+* `wxdash-update.timer` runs `wxdash-update.service` (root, oneshot) about every
+  10 minutes. It runs a root-owned copy of the updater at
+  `/usr/local/lib/wxdash/updater.py`, so the `kitchen` user can't change what runs as root.
+* The updater installs only a **newer** version, only if the tarball's sha256
+  matches `latest.json`, and only if every archive member is a plain file or
+  directory under `wxdash/` (no absolute paths, `..`, or links). It backs up
+  to `wxdash.prev`, swaps the new files in, `chown`s them to `kitchen`,
+  restarts wxdash and waits up to 30 s for `/api/health` to report the new
+  version. If that fails it restores `wxdash.prev`, restarts, and skips that
+  version until a newer one is published.
+* The page checks `/api/health` every 60 s and reloads itself when the version
+  changes, so the kiosk shows the new UI without relaunching Chromium.
+* Logs: `journalctl -u wxdash-update`. Check now: `sudo systemctl start wxdash-update`.
+  Report only: `sudo python3 /usr/local/lib/wxdash/updater.py --check`.
+* Changes to the systemd unit files themselves take effect when `install.sh` is run again.
+* Publishing (on the box): bump `VERSION`, run `./publish.sh`, and upload
+  `wxdash.tgz`, `latest.json` and `install.sh` from `/workspace/wxupload/` to the repo.
+
+## Manual install on the Pi (PiConsole keeps running)
 
 ```bash
 # 1. copy the files
