@@ -108,7 +108,7 @@ systemctl enable wxdash.service >/dev/null 2>&1
 say "Installing wxdash $VERSION into $APP"
 UPDATE_RC=0
 WXDASH_INSTALL_DIR="$APP" WXDASH_OWNER="$KUSER:$KGROUP" WXDASH_LOCK="$TMP/lock" \
-WXDASH_HEALTH_URL="http://127.0.0.1:$PORT/api/health" WXDASH_SELF_PATH=- \
+WXDASH_HEALTH_URL="http://127.0.0.1:$PORT/api/health" WXDASH_SELF_PATH=- WXDASH_KIOSK_RELAUNCH=0 \
   python3 "$LIBDIR/updater.py" --force --tarball "$TMP/wxdash.tgz" --sha256 "$SHA" --version "$VERSION" \
   || UPDATE_RC=$?
 chmod +x "$APP/kiosk.sh" 2>/dev/null || true
@@ -138,7 +138,10 @@ KIOSK_STATE="skipped (no graphical session for $KUSER)"
 if [ -d "$RUNDIR" ] && { [ -n "$WL" ] || [ -S /tmp/.X11-unix/X0 ]; }; then
   pkill -u "$KUSER" -f 'wxdash-chromium' 2>/dev/null || true
   for _ in $(seq 1 10); do pgrep -u "$KUSER" -f 'wxdash-chromium' >/dev/null || break; sleep 0.5; done
-  sudo -u "$KUSER" -H env XDG_RUNTIME_DIR="$RUNDIR" WAYLAND_DISPLAY="${WL:-wayland-0}" DISPLAY=:0 \
+  # kiosk.sh picks native Wayland when WAYLAND_DISPLAY points at a live socket, else X11.
+  if [ -n "$WL" ]; then KENV=(XDG_RUNTIME_DIR="$RUNDIR" WAYLAND_DISPLAY="$WL")
+  else KENV=(XDG_RUNTIME_DIR="$RUNDIR" DISPLAY=:0); fi
+  sudo -u "$KUSER" -H env "${KENV[@]}" \
     setsid -f "$APP/kiosk.sh" </dev/null >/dev/null 2>&1 || true
   KIOSK_STATE="relaunched"
   sleep 4

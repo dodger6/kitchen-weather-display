@@ -121,8 +121,10 @@ rm -rf /home/kitchen/wxdash ~/.config/wxdash-chromium
 
 Page URL options: `?mock=1` (demo data for this page only),
 `?mock=1&lightning=active` (demo with an active nearby storm), `?mock=1&temp=104.5`
-(demo with a test temperature, e.g. `104.5`, `-12.3`, `100.0`, or `none`; mock only), `?lite=1`
-(turns off the glass blur if Chromium is ever sluggish), `?cursor=1` (shows
+(demo with a test temperature, e.g. `104.5`, `-12.3`, `100.0`, or `none`; mock only), `?glass=1`
+(frosted-glass blur + drifting background; off by default because the Pi's GPU has to
+re-blur every card on every frame, `?glass=0` turns it off again; also in Menu),
+`?lite=1` (most minimal: opaque cards), `?cursor=1` (shows
 the mouse pointer), `?stream=0` (polling only, no live stream),
 `?panel=sager|menu` (opens a panel).
 
@@ -197,3 +199,18 @@ Station observation values arrive in SI units (°C, m/s, mb, mm, km) and are
 converted on the server. The trend and "tendency" wording ("Falling
 rapidly" → "Stormy conditions likely"), the rain-rate wording ("Currently
 Dry"), and the feels-like wording follow PiConsole's own thresholds.
+
+## Changes in 1.1.1
+
+* Sun icon redrawn to match the Home Assistant weather card exactly (same geometry,
+  #ffca28, rays spin once every 12 s, core pulses 1 to 1.06 every 2.2 s). The glow is a
+  pre-blurred gradient layer that only fades in and out, so the Pi never repaints it.
+* Smooth mode is the default: no `backdrop-filter` on the cards (semi-opaque cards with a
+  soft inner gradient instead) and a static background that changes only with the time
+  of day / weather. `?glass=1` or Menu, Glass blur brings the old look back.
+* `kiosk.sh` runs Chromium natively on Wayland (`--ozone-platform=wayland
+  --enable-gpu-rasterization`) whenever a Wayland socket exists, instead of going
+  through Xwayland; X11 is only the fallback. `KIOSK_OZONE=x11` forces X11.
+* The updater relaunches the kiosk whenever `kiosk.sh` changed since the kiosk was last
+  started, so new Chromium flags apply without a reboot (journal: `kiosk: ...`).
+
