@@ -200,6 +200,16 @@ converted on the server. The trend and "tendency" wording ("Falling
 rapidly" → "Stormy conditions likely"), the rain-rate wording ("Currently
 Dry"), and the feels-like wording follow PiConsole's own thresholds.
 
+## Changes in 1.1.2
+
+* The temperature bar on the main card now uses a fixed 0–130 °F scale (-18–54 °C when
+  the station is set to Celsius) instead of today's low→high. The full track shows an
+  absolute-temperature gradient (blue/cyan when cold, green/yellow around 60–80 °F,
+  orange/red past 100 °F), dimmed outside today's low–high segment; the white dot is the
+  current temperature. Values outside the scale are clamped to the ends. Tick labels at
+  0, 32, 65, 100 and 130 (middle labels hide automatically if they would collide).
+  Mock-only preview switch: `?mock=1&tunit=c`.
+
 ## Changes in 1.1.1
 
 * Sun icon redrawn to match the Home Assistant weather card exactly (same geometry,
