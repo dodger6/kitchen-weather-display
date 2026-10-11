@@ -152,7 +152,7 @@ without a restart.
 | current observation | `GET /swd/rest/observations/station/{StationID}` | 60 s |
 | forecast | `GET /swd/rest/better_forecast?station_id=…&units_temp=f&units_wind=mph&units_pressure=mb&units_precip=in&units_distance=mi` | 10 min |
 | 24 h history (hi/lo + times, 24 h diff, 3 h trends, avg wind, max gust, strikes today) | `GET /swd/rest/observations/device/{TempestID}?bucket=a&time_start=…&time_end=…` | 10 min |
-| month/year rain, month strikes | `GET /swd/rest/stats/station/{StationID}` (the same call PiConsole makes) | 30 min |
+| month/year rain, month strikes | `GET /swd/rest/observations/device/{TempestID}?bucket=e` for the month-to-date and year-to-date windows, column 28 (29 with `[System] nc_rain = 1`) summed + today's rain, exactly like PiConsole's default; with `[System] stats_endpoint = 1` it uses `GET /swd/rest/stats/station/{StationID}` instead, as PiConsole does | 30 min, and at each new day |
 
 Station observation values arrive in SI units (°C, m/s, mb, mm, km) and are
 converted on the server. The trend and "tendency" wording ("Falling
