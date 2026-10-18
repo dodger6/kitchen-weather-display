@@ -37,6 +37,8 @@ digits, clock with seconds, `static/industrial/`). The default is Classic.
   1.2.0), so **run `install.sh` once** after updating to 1.2.0. Until then a theme
   switch still works but resets to Classic when wxdash restarts (the menu says so).
 * `/?theme=classic` or `/?theme=industrial` previews a theme without saving it.
+* 1.2.1: Industrial Moon panel: the dial is sized to the space it has (it used to spill
+  over the line above NEW / FULL on the real screen) and that divider line is gone.
 
 ## One-line install / repair (recommended)
 
