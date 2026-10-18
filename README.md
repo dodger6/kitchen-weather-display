@@ -14,13 +14,29 @@ decide to switch.
   to the page with Server-Sent Events.
 * `astro.py` computes sun and moon rise/set, moon phase, and next new/full
   moon locally in pure Python, with no `ephem` dependency.
-* `static/` holds the page as vanilla HTML, CSS, and JS. It loads nothing
+* `static/` holds the Classic page and `static/industrial/` the Industrial one, as vanilla HTML, CSS, and JS. It loads nothing
   from the internet, uses inline SVG icons, and bundles the Inter font
   (SIL OFL, see `static/fonts/OFL.txt`).
 * `wxdash.service` is a systemd unit that runs the server as user `kitchen`.
 * `kiosk.sh` opens the dashboard in Chromium, full-screen or windowed.
 * `updater.py`, `wxdash-update.service`, `wxdash-update.timer`: the self-updater (see below).
 * `install.sh`: one-shot installer; `publish.sh`: builds the release files (box only).
+
+## Themes (1.2.0)
+
+Two looks, picked from **Menu → Theme** on the screen: **Classic** (the original
+glass design, `static/`) and **Industrial** (burnt orange and black gauges, LED
+digits, clock with seconds, `static/industrial/`). The default is Classic.
+
+* Tapping a theme POSTs `{"theme": "..."}` to `/api/settings`; the server saves it to
+  `/var/lib/wxdash/settings.json` and every open page reloads into the new theme
+  (SSE `settings` event, with `/api/health` as a backup).
+* That file lives **outside** `/home/kitchen/wxdash`, so self-updates, rollbacks and
+  `install.sh` never change it; it survives reboots and kiosk restarts.
+* `/var/lib/wxdash` comes from `StateDirectory=wxdash` in `wxdash.service` (new in
+  1.2.0), so **run `install.sh` once** after updating to 1.2.0. Until then a theme
+  switch still works but resets to Classic when wxdash restarts (the menu says so).
+* `/?theme=classic` or `/?theme=industrial` previews a theme without saving it.
 
 ## One-line install / repair (recommended)
 
