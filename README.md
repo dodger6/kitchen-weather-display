@@ -80,6 +80,15 @@ The default is Classic.
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
 
+* 1.5.1: Redwoods hero: the tree-ring log slab behind the temperature is gone (as is the
+  slate plaque on it). The colored temperature arc stays exactly as before (45 cold-to-hot
+  segments, bronze pin at the current temperature, today's low-high band, degree labels),
+  and the forest scene, rain, fog and drips now show through inside it, with the big
+  current temperature sitting on the forest (larger, with a dark outline and a soft
+  static shade behind it for contrast; no blur). Low/High with times, Outdoor now, the
+  Feeling badge and the five tiles are unchanged, as are all other cards and themes.
+  `img/ring.webp` was removed. Normal self-update; the saved theme is kept.
+
 * 1.5.0: new **Redwoods** theme (a misty coast-redwood grove: bark, fog, oiled redwood
   cards with dark slate plaques, muted forest colours, high-contrast readouts). Gauges: a
   tree-ring slab for temperature with an inlaid scale and a bronze index, a bronze survey
