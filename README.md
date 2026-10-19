@@ -14,20 +14,23 @@ decide to switch.
   to the page with Server-Sent Events.
 * `astro.py` computes sun and moon rise/set, moon phase, and next new/full
   moon locally in pure Python, with no `ephem` dependency.
-* `static/` holds the Classic page, `static/industrial/` the Industrial one and `static/desert/` the Desert one, as vanilla HTML, CSS, and JS. It loads nothing
+* `static/` holds the Classic page, `static/industrial/` the Industrial one, `static/desert/` the Desert one, `static/arctic/` the Arctic one and `static/redwoods/` the Redwoods one, as vanilla HTML, CSS, and JS. It loads nothing
   from the internet, uses inline SVG icons, and bundles the Inter font
   (SIL OFL, see `static/fonts/OFL.txt`); Desert bundles Ultra (Apache-2.0) and
-  Zilla Slab (SIL OFL), see `static/desert/fonts/OFL.txt`.
+  Zilla Slab (SIL OFL), see `static/desert/fonts/OFL.txt`; Arctic bundles Exo 2 and
+  Barlow Semi Condensed (SIL OFL), see `static/arctic/fonts/OFL.txt`; Redwoods bundles
+  National Park and Source Serif 4 (SIL OFL), see `static/redwoods/fonts/OFL.txt`.
 * `wxdash.service` is a systemd unit that runs the server as user `kitchen`.
 * `kiosk.sh` opens the dashboard in Chromium, full-screen or windowed.
 * `updater.py`, `wxdash-update.service`, `wxdash-update.timer`: the self-updater (see below).
 * `install.sh`: one-shot installer; `publish.sh`: builds the release files (box only).
 
-## Themes (1.2.0, Desert added in 1.3.0)
+## Themes (1.2.0; Desert added in 1.3.0, Arctic in 1.4.0, Redwoods in 1.5.0)
 
-Three looks, picked from **Menu → Theme** on the screen: **Classic** (the original
+Five looks, picked from **Menu → Theme** on the screen: **Classic** (the original
 glass design, `static/`) and **Industrial** (burnt orange and black gauges, LED
-digits, clock with seconds, `static/industrial/`) and **Desert** (1.3.0, `static/desert/`).
+digits, clock with seconds, `static/industrial/`), **Desert** (1.3.0, `static/desert/`)
+**Arctic** (1.4.0, `static/arctic/`) and **Redwoods** (1.5.0, `static/redwoods/`).
 The default is Classic.
 
 * Tapping a theme POSTs `{"theme": "..."}` to `/api/settings`; the server saves it to
@@ -38,7 +41,8 @@ The default is Classic.
 * `/var/lib/wxdash` comes from `StateDirectory=wxdash` in `wxdash.service` (new in
   1.2.0), so **run `install.sh` once** after updating to 1.2.0. Until then a theme
   switch still works but resets to Classic when wxdash restarts (the menu says so).
-* `/?theme=classic`, `/?theme=industrial` or `/?theme=desert` previews a theme without saving it.
+* `/?theme=classic`, `/?theme=industrial`, `/?theme=desert`, `/?theme=arctic` or `/?theme=redwoods` previews a theme
+  without saving it.
 * 1.2.1: Industrial Moon panel: the dial is sized to the space it has (it used to spill
   over the line above NEW / FULL on the real screen) and that divider line is gone.
 * 1.3.0: new **Desert** theme, selectable from Menu → Theme in all three themes. Desert
@@ -56,6 +60,65 @@ The default is Classic.
   Design credits (ideas only, no code copied): rejuvenate/lovelace-horizon-card (sun arc),
   ugomeda/d3-liquid-fill-gauge (vessel fill), hmu332233/moon.svg (moon phase),
   gibbonsr4/tempest-dashboard (lightning grouping).
+* 1.4.0: new **Arctic** theme (glacier blue, ice white, deep navy, aurora green/teal/violet,
+  coral for hot and alerts). Gauges: an aurora ice-crystal temperature arc with a snowflake
+  marker, a snowflake compass with an icicle pointer and a blowing-snow speed bar with a
+  rolling snowball, an ice-core barometer, frosted rain jars, frost-to-mist humidity,
+  snow-glare UV crystals, the moon over snowy peaks, a snowy ridge for the next 12 hours and
+  an ice-block strike chart. Gentle motion (aurora, snowfall, twinkling stars, blowing snow)
+  uses only transform/opacity, pauses when the page is hidden and stops with Lite mode or
+  reduced motion. Same live data, SSE, health checks, night mode and lightning alerts.
+  * The Theme menu in all four themes now lists Classic, Industrial, Desert and Arctic as a
+    2x2 grid of large buttons (at least 48 px tall on the 800x480 screen).
+  * Desert fix: the strike chart, the next-12-hours dunes and the barometer layers now
+    redraw when their own box changes size, not only when the whole page does.
+  * Demo-only options (`mock_time`, `still`, test values, the recording hook) do nothing
+    without `?mock=1`.
+  * Updating keeps the saved theme; no service-file change. Rolling back to 1.3.0 while
+    Arctic is saved shows Classic (1.3.0 doesn't know Arctic); the saved file isn't changed.
+  * Credits: same design ideas as Desert (horizon-card sun arc, liquid-fill vessels,
+    moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
+    and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
+
+* 1.5.0: new **Redwoods** theme (a misty coast-redwood grove: bark, fog, oiled redwood
+  cards with dark slate plaques, muted forest colours, high-contrast readouts). Gauges: a
+  tree-ring slab for temperature with an inlaid scale and a bronze index, a bronze survey
+  compass and a speed rule with a bronze slider for wind, a soil core-sample barometer, glass
+  rain gauges with bronze caps, dry-bark-to-fog humidity, UV sun discs, the moon over the
+  grove, a treeline for the next 12 hours and a river-stone strike chart. Rain
+  falls through the trees all the time, gets heavier when the station reports a rain rate,
+  and slants with the live wind; fog drifts between the trunks; a close, recent strike
+  flashes the sky. Motion uses only transform/opacity, pauses when the page is hidden and
+  stops with Lite mode or reduced motion. Night (8 PM-6 AM) is a dark, moonlit grove.
+  Same live data, SSE, health checks and lightning alerts. 1.5.0 also contains everything
+  from 1.4.0 (Arctic), which was never published on its own.
+  * The Theme menu in all five themes lists Classic, Industrial, Desert, Arctic and Redwoods
+    as large buttons in a 3 + 2 grid (second row centered; at least 48 px tall on the
+    800x480 screen, fits on screen at 800x480 and 1920x1080).
+  * Header fix (Redwoods, Arctic, Desert): with a two-digit hour, the Live pill and a recent
+    strike badge, the date could run under the Live pill. The pills now always keep their
+    full width; the station name and status shorten with "…" instead.
+  * The server now serves `.jpg` and `.webp` files from `static/` (Redwoods' textures).
+  * Redwoods follows a theme change made on another screen, its demo-only options
+    (`mock_time`, `still`, `flash`, `rain_rate`, test values, the recording hook) do nothing
+    without `?mock=1`, and its charts redraw when their own box changes size.
+  * Updating keeps the saved theme; no service-file change, so the normal self-update is
+    enough. Rolling back to 1.4.0/1.3.0 while Redwoods is saved shows Classic (older versions
+    don't know Redwoods); the saved file isn't changed, so Redwoods comes back on 1.5.0.
+  * Credits (visual ideas and techniques only, no code copied; every image in
+    `static/redwoods/img` is generated procedurally, no photos or third-party artwork):
+    timpyrkov/procedural-art and gorillasun.de "Radial Perlin Noise and Generative Tree
+    Rings" (noise-distorted radial rings, used for the tree-ring slab); twodee "how-to-3d:
+    Wood" (perturbed circular/linear oscillation, the oiled-board grain); Liu, Dong, Hašan
+    and Marschner, "Simulating the structure and texture of solid wood" (SIGGRAPH Asia 2016;
+    earlywood/latewood, pores and sapwood/heartwood colour model); Thuotracy/rain-pureCSS and
+    taiypeo/CSS-Rain (GPL-3.0, ideas only; reworked as three depths of tiled rain streaks in a
+    wind-rotated wrapper); CSS 3D Lab "Digital rain in pure CSS" (MIT snippet; near layers
+    faster than far ones); ugomeda/d3-liquid-fill-gauge (fill level in the rain gauges);
+    hmu332233/moon.svg (moon phase); general layout ideas from poblabs/weewx-belchertown and
+    neoground/neowx-material. Fonts: National Park (The National Park Project, after the NPS
+    routed-wood signs) and Source Serif 4 (Adobe), both SIL OFL, see
+    `static/redwoods/fonts/OFL.txt`.
 
 ## One-line install / repair (recommended)
 
