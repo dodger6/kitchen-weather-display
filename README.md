@@ -30,7 +30,7 @@ decide to switch.
 Five looks, picked from **Menu → Theme** on the screen: **Classic** (the original
 glass design, `static/`) and **Industrial** (burnt orange and black gauges, LED
 digits, clock with seconds, `static/industrial/`), **Desert** (1.3.0, `static/desert/`)
-**Arctic** (1.4.0, `static/arctic/`) and **Redwoods** (1.5.0, `static/redwoods/`).
+**Arctic** (1.4.0, `static/arctic/`) and **Redwoods** (1.5.0; sun-following sky in 1.5.3, `static/redwoods/`).
 The default is Classic.
 
 * Tapping a theme POSTs `{"theme": "..."}` to `/api/settings`; the server saves it to
@@ -79,6 +79,21 @@ The default is Classic.
   * Credits: same design ideas as Desert (horizon-card sun arc, liquid-fill vessels,
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
+
+* 1.5.4: Redwoods sun phases punched so they read at a glance (same solar math as 1.5.3). Dawn has a
+  cool blue-gray canopy with a clear rose/peach glow low in the fog and low east shafts; late afternoon
+  has warm golden-amber shafts from the west, warm-tinted fog and a golden cast on the bark; dusk carries
+  more amber near the horizon before fading to violet; midday stays the bright misty grove. Atmosphere
+  wash is baked into the pre-rendered JPGs (no runtime filters). Normal self-update.
+
+* 1.5.3: Redwoods grove follows the sun at the station (same solar math as Desert 1.5.2). Five
+  pre-rendered phases crossfade by opacity: moonlit night with stars through the canopy -> dawn
+  (cool blue-gray fog warming to soft rose/peach, low east light shafts) -> misty day with brighter
+  shafts -> late-afternoon golden shafts from the west -> dusk (deep amber to violet, fog thickening)
+  -> night. Night look starts at the end of civil twilight (sun 6 deg below the horizon) instead of
+  8 PM-6 AM, falling back to those hours if lat/lon is missing. Rain, fog, drips and storm flash are
+  unchanged; motion stays transform/opacity only. `?mock=1&mock_time=HH:MM` previews any phase.
+  Desert and the other themes are unchanged; normal self-update.
 
 * 1.5.2: Desert sky follows the sun at the station. The backdrop, the sky behind the
   temperature arc and the moon card's sky are coloured from the sun's real elevation at the
