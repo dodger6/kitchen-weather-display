@@ -14,19 +14,21 @@ decide to switch.
   to the page with Server-Sent Events.
 * `astro.py` computes sun and moon rise/set, moon phase, and next new/full
   moon locally in pure Python, with no `ephem` dependency.
-* `static/` holds the Classic page and `static/industrial/` the Industrial one, as vanilla HTML, CSS, and JS. It loads nothing
+* `static/` holds the Classic page, `static/industrial/` the Industrial one and `static/desert/` the Desert one, as vanilla HTML, CSS, and JS. It loads nothing
   from the internet, uses inline SVG icons, and bundles the Inter font
-  (SIL OFL, see `static/fonts/OFL.txt`).
+  (SIL OFL, see `static/fonts/OFL.txt`); Desert bundles Ultra (Apache-2.0) and
+  Zilla Slab (SIL OFL), see `static/desert/fonts/OFL.txt`.
 * `wxdash.service` is a systemd unit that runs the server as user `kitchen`.
 * `kiosk.sh` opens the dashboard in Chromium, full-screen or windowed.
 * `updater.py`, `wxdash-update.service`, `wxdash-update.timer`: the self-updater (see below).
 * `install.sh`: one-shot installer; `publish.sh`: builds the release files (box only).
 
-## Themes (1.2.0)
+## Themes (1.2.0, Desert added in 1.3.0)
 
-Two looks, picked from **Menu → Theme** on the screen: **Classic** (the original
+Three looks, picked from **Menu → Theme** on the screen: **Classic** (the original
 glass design, `static/`) and **Industrial** (burnt orange and black gauges, LED
-digits, clock with seconds, `static/industrial/`). The default is Classic.
+digits, clock with seconds, `static/industrial/`) and **Desert** (1.3.0, `static/desert/`).
+The default is Classic.
 
 * Tapping a theme POSTs `{"theme": "..."}` to `/api/settings`; the server saves it to
   `/var/lib/wxdash/settings.json` and every open page reloads into the new theme
@@ -36,9 +38,24 @@ digits, clock with seconds, `static/industrial/`). The default is Classic.
 * `/var/lib/wxdash` comes from `StateDirectory=wxdash` in `wxdash.service` (new in
   1.2.0), so **run `install.sh` once** after updating to 1.2.0. Until then a theme
   switch still works but resets to Classic when wxdash restarts (the menu says so).
-* `/?theme=classic` or `/?theme=industrial` previews a theme without saving it.
+* `/?theme=classic`, `/?theme=industrial` or `/?theme=desert` previews a theme without saving it.
 * 1.2.1: Industrial Moon panel: the dial is sized to the space it has (it used to spill
   over the line above NEW / FULL on the real screen) and that divider line is gone.
+* 1.3.0: new **Desert** theme, selectable from Menu → Theme in all three themes. Desert
+  has its own gauges and layout: a sun riding an arc over a mesa for temperature
+  (cold-to-hot scale, today's low/high band), a stone star compass with a hawk-feather
+  pointer plus a drifting-sand speed bar with tumbleweed and gust flag, canyon rock layers
+  for the barometer, clay pots for rain, cracked-earth-to-oasis humidity, rock-art suns
+  for UV, the moon rising over a mesa, a dune horizon for the next 12 hours, and a storm
+  over a mesa with stacked-stone (cairn) strike counts. Night (8 PM-6 AM) is a starry
+  desert sky with glowing readouts. It uses the same live data, SSE, health checks and
+  lightning alerts as the other themes. Updating keeps the saved theme (an Industrial
+  screen stays Industrial); no service-file change, so the normal self-update is enough.
+  Rolling back to 1.2.x while Desert is saved shows Classic (1.2.x doesn't know Desert);
+  the saved file isn't changed, so Desert comes back on 1.3.0.
+  Design credits (ideas only, no code copied): rejuvenate/lovelace-horizon-card (sun arc),
+  ugomeda/d3-liquid-fill-gauge (vessel fill), hmu332233/moon.svg (moon phase),
+  gibbonsr4/tempest-dashboard (lightning grouping).
 
 ## One-line install / repair (recommended)
 
