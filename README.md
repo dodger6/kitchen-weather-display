@@ -51,7 +51,7 @@ The default is Classic.
   pointer plus a drifting-sand speed bar with tumbleweed and gust flag, canyon rock layers
   for the barometer, clay pots for rain, cracked-earth-to-oasis humidity, rock-art suns
   for UV, the moon rising over a mesa, a dune horizon for the next 12 hours, and a storm
-  over a mesa with stacked-stone (cairn) strike counts. Night (8 PM-6 AM) is a starry
+  over a mesa with stacked-stone (cairn) strike counts. Night (8 PM-6 AM; real twilight since 1.5.2) is a starry
   desert sky with glowing readouts. It uses the same live data, SSE, health checks and
   lightning alerts as the other themes. Updating keeps the saved theme (an Industrial
   screen stays Industrial); no service-file change, so the normal self-update is enough.
@@ -79,6 +79,22 @@ The default is Classic.
   * Credits: same design ideas as Desert (horizon-card sun arc, liquid-fill vessels,
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
+
+* 1.5.2: Desert sky follows the sun at the station. The backdrop, the sky behind the
+  temperature arc and the moon card's sky are coloured from the sun's real elevation at the
+  station's latitude/longitude (from the ini, UTC-based, so the Pi's or browser's own time zone
+  doesn't matter; it matches `astro.py` to ~0.01 deg): starry night with twinkles, an occasional
+  shooting star and moonlight on the mesas -> dawn (lavender, pink and peach, from civil
+  twilight to about an hour after sunrise, sun rising on the left) -> clear desert blue ->
+  late-afternoon golden orange (sun sinking on the right) -> dusk (deep orange, magenta and
+  purple, first stars) -> night. Phases blend continuously; colours are recalculated once a
+  minute (no running animation for that, no filters/blur). The real sun disc moves on an arc
+  low over the mesas and fades out when high so it never competes with the temperature sun.
+  Desert's night look (darker cards, glowing readouts) now starts when the sun is 6 deg below
+  the horizon (end of civil twilight) instead of a fixed 8 PM-6 AM. Twinkles/shooting star stop
+  in Lite mode, with reduced motion and while the page is hidden; the heat shimmer pauses
+  outside daylight. `?mock=1&mock_time=HH:MM` previews any phase (mock only). Other themes,
+  the server and the saved theme are unchanged; normal self-update.
 
 * 1.5.1: Redwoods hero: the tree-ring log slab behind the temperature is gone (as is the
   slate plaque on it). The colored temperature arc stays exactly as before (45 cold-to-hot
