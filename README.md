@@ -80,6 +80,12 @@ The default is Classic.
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
 
+* 1.5.6: Redwoods wind bar: the copper post and pennant are replaced by a copper arrow above the bar
+  pointing down at the current speed (gust stays in the Gust now / Max gust stats). Arctic and Desert:
+  the gust pennant is now a down-arrow (coral / terracotta) at the gust value. Precipitation chances in
+  every theme (Forecast chip, Tomorrow row, Next 12 Hours) use an inline SVG raindrop instead of the
+  U+1F4A7 emoji, which the Pi has no font for (it showed as an empty box). Mock-only `?gust=N` previews
+  the gust marker.
 * 1.5.5: the Lightning card stays on screen after a strike. On Redwoods and Arctic the card's
   strike highlight reused the class name "flash", which those themes also use for the full-screen
   storm-flash layer (hidden, absolutely positioned, opacity 0), so the first live strike hid the whole
