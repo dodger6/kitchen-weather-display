@@ -80,6 +80,13 @@ The default is Classic.
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
 
+* 1.5.5: the Lightning card stays on screen after a strike. On Redwoods and Arctic the card's
+  strike highlight reused the class name "flash", which those themes also use for the full-screen
+  storm-flash layer (hidden, absolutely positioned, opacity 0), so the first live strike hid the whole
+  card until the page reloaded. The highlight is now "lt-flash" and clears itself. Every theme also
+  cleans strike data before drawing, keeps the last good values if a draw fails, and shows "—" for
+  missing values, so bad or partial data can no longer blank the card. New mock scenarios
+  `?mock=1&lightning=old|none|broken` and `tools/lightning_test.js` test this.
 * 1.5.4: Redwoods sun phases punched so they read at a glance (same solar math as 1.5.3). Dawn has a
   cool blue-gray canopy with a clear rose/peach glow low in the fog and low east shafts; late afternoon
   has warm golden-amber shafts from the west, warm-tinted fog and a golden cast on the bark; dusk carries
@@ -258,7 +265,7 @@ rm -rf /home/kitchen/wxdash ~/.config/wxdash-chromium
 | `--no-websocket` / `WXDASH_NO_WS=1` | off | REST polling only (no live WeatherFlow WebSocket) |
 
 Page URL options: `?mock=1` (demo data for this page only),
-`?mock=1&lightning=active` (demo with an active nearby storm), `?mock=1&temp=104.5`
+`?mock=1&lightning=active` (demo with an active nearby storm; also `old` = storm ended 45 min ago, `none` = no strikes on record, `broken` = partial/null data), `?mock=1&temp=104.5`
 (demo with a test temperature, e.g. `104.5`, `-12.3`, `100.0`, or `none`; mock only), `?glass=1`
 (frosted-glass blur + drifting background; off by default because the Pi's GPU has to
 re-blur every card on every frame, `?glass=0` turns it off again; also in Menu),
