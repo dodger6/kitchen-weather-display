@@ -80,6 +80,14 @@ The default is Classic.
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
 
+* 1.5.8: Menu → "Feels-like labels ›" lets you set where each "Feeling …" label starts (°F, from the
+  feels-like temperature). Nine labels, coldest to hottest, each with its "from" temperature and large
+  − / + buttons (1° steps, -40…140 °F); values must stay in increasing order (a button greys out at its
+  neighbour). Changes show on the card at once and are saved via POST /api/settings key
+  `feel_thresholds` ([{label, min}] ×8) in /var/lib/wxdash/settings.json; "Reset to defaults" removes the
+  key. Defaults are unchanged (the ini [FeelsLike] cut-offs, else 23/32/41/50/59/68/77/86 °F). The server
+  validates (numbers, order, range, label names) and falls back to defaults if the file is invalid.
+  Shared helper static/feel.js; all five themes.
 * 1.5.7: the mouse pointer is no longer permanently invisible. Every theme starts with it hidden; it
   appears as soon as the mouse moves (or a mouse button / wheel is used) and hides again after about
   3 s idle. Touch never shows it. While visible, Menu, buttons and tappable cards show the hand pointer.
