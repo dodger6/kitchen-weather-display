@@ -80,6 +80,11 @@ The default is Classic.
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
 
+* 1.5.7: the mouse pointer is no longer permanently invisible. Every theme starts with it hidden; it
+  appears as soon as the mouse moves (or a mouse button / wheel is used) and hides again after about
+  3 s idle. Touch never shows it. While visible, Menu, buttons and tappable cards show the hand pointer.
+  Shared helper static/cursor.js (passive listeners, one idle timer); the menu's "Show cursor" option
+  still keeps it on permanently.
 * 1.5.6: Redwoods wind bar: the copper post and pennant are replaced by a copper arrow above the bar
   pointing down at the current speed (gust stays in the Gust now / Max gust stats). Arctic and Desert:
   the gust pennant is now a down-arrow (coral / terracotta) at the gust value. Precipitation chances in
