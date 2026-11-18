@@ -14,7 +14,7 @@ decide to switch.
   to the page with Server-Sent Events.
 * `astro.py` computes sun and moon rise/set, moon phase, and next new/full
   moon locally in pure Python, with no `ephem` dependency.
-* `static/` holds the Classic page, `static/industrial/` the Industrial one, `static/desert/` the Desert one, `static/arctic/` the Arctic one and `static/redwoods/` the Redwoods one, as vanilla HTML, CSS, and JS. It loads nothing
+* `static/` holds the Classic page, `static/industrial/` the Industrial one, `static/desert/` the Desert one, `static/arctic/` the Arctic one, `static/redwoods/` the Redwoods one, and `static/nixie/` the Nixie one, as vanilla HTML, CSS, and JS. It loads nothing
   from the internet, uses inline SVG icons, and bundles the Inter font
   (SIL OFL, see `static/fonts/OFL.txt`); Desert bundles Ultra (Apache-2.0) and
   Zilla Slab (SIL OFL), see `static/desert/fonts/OFL.txt`; Arctic bundles Exo 2 and
@@ -25,12 +25,13 @@ decide to switch.
 * `updater.py`, `wxdash-update.service`, `wxdash-update.timer`: the self-updater (see below).
 * `install.sh`: one-shot installer; `publish.sh`: builds the release files (box only).
 
-## Themes (1.2.0; Desert added in 1.3.0, Arctic in 1.4.0, Redwoods in 1.5.0)
+## Themes (1.2.0; Desert added in 1.3.0, Arctic in 1.4.0, Redwoods in 1.5.0, Nixie in 1.5.9)
 
-Five looks, picked from **Menu → Theme** on the screen: **Classic** (the original
+Six looks, picked from **Menu → Theme** on the screen: **Classic** (the original
 glass design, `static/`) and **Industrial** (burnt orange and black gauges, LED
 digits, clock with seconds, `static/industrial/`), **Desert** (1.3.0, `static/desert/`)
-**Arctic** (1.4.0, `static/arctic/`) and **Redwoods** (1.5.0; sun-following sky in 1.5.3, `static/redwoods/`).
+**Arctic** (1.4.0, `static/arctic/`), **Redwoods** (1.5.0; sun-following sky in 1.5.3, `static/redwoods/`)
+and **Nixie** (1.5.9, `static/nixie/`).
 The default is Classic.
 
 * Tapping a theme POSTs `{"theme": "..."}` to `/api/settings`; the server saves it to
@@ -41,7 +42,7 @@ The default is Classic.
 * `/var/lib/wxdash` comes from `StateDirectory=wxdash` in `wxdash.service` (new in
   1.2.0), so **run `install.sh` once** after updating to 1.2.0. Until then a theme
   switch still works but resets to Classic when wxdash restarts (the menu says so).
-* `/?theme=classic`, `/?theme=industrial`, `/?theme=desert`, `/?theme=arctic` or `/?theme=redwoods` previews a theme
+* `/?theme=classic`, `/?theme=industrial`, `/?theme=desert`, `/?theme=arctic`, `/?theme=redwoods` or `/?theme=nixie` previews a theme
   without saving it.
 * 1.2.1: Industrial Moon panel: the dial is sized to the space it has (it used to spill
   over the line above NEW / FULL on the real screen) and that divider line is gone.
@@ -80,6 +81,10 @@ The default is Classic.
     moon.svg phase, tempest-dashboard lightning grouping); fonts Exo 2 (NDISCOVER/Exo-2.0)
     and Barlow Semi Condensed (jpt/barlow), both SIL OFL.
 
+* 1.5.10: Rainfall bars in every theme use higher floors so a heavy day no longer fills the
+  Today tube: Today and Yesterday 6" (150 mm), Month 10" (250 mm), Year 30" (750 mm). If a
+  total exceeds its floor, the scale grows to ceil(v/0.8) so the bar is not pinned at 100%.
+* 1.5.9: new **Nixie** theme (Menu → Theme), `static/nixie/`.
 * 1.5.8: Menu → "Feels-like labels ›" lets you set where each "Feeling …" label starts (°F, from the
   feels-like temperature). Nine labels, coldest to hottest, each with its "from" temperature and large
   − / + buttons (1° steps, -40…140 °F); values must stay in increasing order (a button greys out at its
